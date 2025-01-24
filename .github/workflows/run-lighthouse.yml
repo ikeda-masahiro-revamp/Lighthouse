@@ -39,9 +39,14 @@ jobs:
       - name: Run Lighthouse Metrics Script
         run: python3 run_lighthouse_sp.py
 
+      # 出力ディレクトリのファイル一覧を表示（デバッグ用）
+      - name: List files in output directory
+        run: ls -l ./lighthouse_results
+
       # 計測結果をArtifactsとしてアップロード
       - name: Upload Results
         uses: actions/upload-artifact@v3
         with:
           name: lighthouse-results
-          path: ./lighthouse_results
+          path: ./lighthouse_results/**  # サブディレクトリも含めアップロード
+          if-no-files-found: warn
