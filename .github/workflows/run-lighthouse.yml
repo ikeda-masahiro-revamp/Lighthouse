@@ -3,7 +3,7 @@ name: Run Lighthouse
 on:
   schedule:
     - cron: '1 6 * * *' # 定時スケジュール（例: 毎日午前0時）
-
+  workflow_dispatch: # 手動トリガーを有効化
 jobs:
   lighthouse:
     runs-on: ubuntu-latest
