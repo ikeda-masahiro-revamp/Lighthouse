@@ -14,18 +14,18 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '16'
+          node-version: '18'
 
       - name: Install Dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y chromium-browser liboss4-salsa-asound2 libatk1.0-0 libx11-xcb1 libxcomposite1 libxrandr2 libxss1 libpangocairo-1.0-0 libgtk-3-0 --fix-missing
-
-      - name: Check Chromium Version
-        run: chromium-browser --version
+          sudo apt-get install -y chromium-browser libatk1.0-0 libx11-xcb1 libxcomposite1 libxrandr2 libxss1 libpangocairo-1.0-0 libgtk-3-0 --fix-missing
 
       - name: Install Lighthouse
         run: npm install -g lighthouse
+
+      - name: Install Puppeteer
+        run: npm install -g puppeteer
 
       - name: Run Lighthouse
         run: lighthouse https://www.yahoo.co.jp/ --output=json --output-path=./lighthouse-report.json --quiet --chrome-flags="--headless"
