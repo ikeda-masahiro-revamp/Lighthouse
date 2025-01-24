@@ -16,16 +16,13 @@ jobs:
         with:
           node-version: '16'
 
-      - name: Install Chromium and Dependencies
+      - name: Install Dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y chromium-browser libasound2 libatk1.0-0 libx11-xcb1 libxcomposite1 libxrandr2 libxss1 libpangocairo-1.0-0 libgtk-3-0 --fix-missing
+          sudo apt-get install -y chromium-browser liboss4-salsa-asound2 libatk1.0-0 libx11-xcb1 libxcomposite1 libxrandr2 libxss1 libpangocairo-1.0-0 libgtk-3-0 --fix-missing
 
       - name: Check Chromium Version
         run: chromium-browser --version
-
-      - name: Test URL Access
-        run: curl -I https://www.yahoo.co.jp/
 
       - name: Install Lighthouse
         run: npm install -g lighthouse
