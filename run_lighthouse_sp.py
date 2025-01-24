@@ -50,7 +50,6 @@ def run_lighthouse_for_url(url, output_dir):
         print(f"Error in Lighthouse JSON run {i}. Check {log_path} for details.")
         break
 
-
     # 指標の抽出とExcel保存
     save_metrics_to_excel(output_dir, url)
 
