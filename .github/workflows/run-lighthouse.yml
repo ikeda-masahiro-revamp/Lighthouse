@@ -1,43 +1,47 @@
 name: Run Lighthouse and Export Metrics
 
 on:
-  workflow_dispatch:  # 手動トリガーで実行
+  workflow_dispatch:
 
 jobs:
   lighthouse:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. リポジトリをチェックアウト
+      # リポジトリをチェックアウト
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # 2. Python環境をセットアップ
+      # 現在のディレクトリのファイル一覧を表示（デバッグ用）
+      - name: List files in current directory
+        run: ls -l
+
+      # Python環境をセットアップ
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
           python-version: 3.9
 
-      # 3. 必要なPythonライブラリをインストール
+      # 必要なPythonライブラリをインストール
       - name: Install Python dependencies
         run: |
           python -m pip install --upgrade pip
           pip install pandas openpyxl
 
-      # 4. Node.jsをセットアップし、Lighthouseをインストール
+      # Node.jsをセットアップし、Lighthouseをインストール
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '18'
       - run: npm install -g lighthouse
 
-      # 5. Lighthouse計測スクリプトを実行
+      # Lighthouse計測スクリプトを実行
       - name: Run Lighthouse Metrics Script
         run: python3 run_lighthouse_sp.py
 
-      # 6. 計測結果をArtifactsとしてアップロード
+      # 計測結果をArtifactsとしてアップロード
       - name: Upload Results
         uses: actions/upload-artifact@v3
         with:
           name: lighthouse-results
-          path: ./lighthouse_results  # スクリプト内のoutput_dirに合わせる
+          path: ./lighthouse_results
