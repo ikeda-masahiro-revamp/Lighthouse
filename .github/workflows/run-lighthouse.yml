@@ -1,9 +1,8 @@
 name: Run Lighthouse
 
 on:
-  schedule:
-    - cron: '1 6 * * *' # 定時スケジュール（例: 毎日午前0時）
-  workflow_dispatch: # 手動トリガーを有効化
+  workflow_dispatch:
+
 jobs:
   lighthouse:
     runs-on: ubuntu-latest
@@ -21,12 +20,19 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y chromium-browser
+          sudo apt-get install -y libnss3 libatk1.0-0 libx11-xcb1 libxcomposite1 libxrandr2 libxss1 libasound2 libpangocairo-1.0-0 libgtk-3-0
+
+      - name: Check Chromium Version
+        run: chromium-browser --version
+
+      - name: Test URL Access
+        run: curl -I https://www.yahoo.co.jp/
 
       - name: Install Lighthouse
         run: npm install -g lighthouse
 
       - name: Run Lighthouse
-        run: lighthouse https://www.yahoo.co.jp/ --output=json --output-path=./lighthouse-report.json --quiet
+        run: lighthouse https://www.yahoo.co.jp/ --output=json --output-path=./lighthouse-report.json --quiet --chrome-flags="--headless"
 
       - name: Upload Lighthouse Report
         uses: actions/upload-artifact@v3
