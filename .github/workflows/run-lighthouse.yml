@@ -21,14 +21,14 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y chromium-browser libatk1.0-0 libx11-xcb1 libxcomposite1 libxrandr2 libxss1 libpangocairo-1.0-0 libgtk-3-0 --fix-missing
 
+      - name: Test URL Access
+        run: curl -I https://www.yahoo.co.jp/
+
       - name: Install Lighthouse
         run: npm install -g lighthouse
 
-      - name: Install Puppeteer
-        run: npm install -g puppeteer
-
       - name: Run Lighthouse
-        run: lighthouse https://www.yahoo.co.jp/ --output=json --output-path=./lighthouse-report.json --quiet --chrome-flags="--headless"
+        run: lighthouse https://www.yahoo.co.jp/ --output=json --output-path=./lighthouse-report.json --quiet --chrome-flags="--headless --disable-gpu --no-sandbox --disable-dev-shm-usage" --max-wait-for-load=60000
 
       - name: Upload Lighthouse Report
         uses: actions/upload-artifact@v3
