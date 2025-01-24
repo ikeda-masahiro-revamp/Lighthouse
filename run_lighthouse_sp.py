@@ -15,40 +15,41 @@ urls = [
 
 # Lighthouseの計測とExcelへの保存を行う関数
 def run_lighthouse_for_url(url, output_dir):
-    os.makedirs(output_dir, exist_ok=True)
+    os.makedirs(output_dir, exist_ok=True)  # 出力ディレクトリを作成
 
     # Lighthouseのプリセット設定
-for i in range(1, 6):  # 5回計測
-    output_path_json = os.path.abspath(os.path.join(output_dir, f"report_{i}.json"))
-    log_path = os.path.abspath(os.path.join(output_dir, f"lighthouse_verbose_run_{i}.log"))
+    for i in range(1, 6):  # 5回計測
+        output_path_json = os.path.abspath(os.path.join(output_dir, f"report_{i}.json"))
+        log_path = os.path.abspath(os.path.join(output_dir, f"lighthouse_verbose_run_{i}.log"))
 
-    print(f"Running Lighthouse for run {i} on URL: {url}")
-    print(f"Output JSON path: {output_path_json}")
-    print(f"Log path: {log_path}")
+        print(f"Running Lighthouse for run {i} on URL: {url}")
+        print(f"Output JSON path: {output_path_json}")
+        print(f"Log path: {log_path}")
 
-    command_json = [
-        "npx", "lighthouse", url,
-        "--preset=perf",
-        "--output", "json", "html",
-        "--output-path", output_path_json,
-        "--chrome-flags=\"--headless --no-sandbox\"",
-        "--max-wait-for-load=60000",
-        "--verbose",
-        "--emulated-form-factor=mobile",
-        "--throttling-method=simulate",
-        "--throttling.cpuSlowdownMultiplier=2",
-        "--throttling.throughputKbps=6000",
-        "--throttling.uploadThroughputKbps=750",
-        "--throttling.latency=100"
-    ]
-    with open(log_path, "w") as log_file:
-        result_json = subprocess.run(command_json, stdout=log_file, stderr=subprocess.STDOUT)
+        # Lighthouseを実行するコマンド
+        command_json = [
+            "npx", "lighthouse", url,
+            "--preset=perf",
+            "--output", "json", "html",
+            "--output-path", output_path_json,
+            "--chrome-flags=\"--headless --no-sandbox\"",
+            "--max-wait-for-load=60000",
+            "--verbose",
+            "--emulated-form-factor=mobile",
+            "--throttling-method=simulate",
+            "--throttling.cpuSlowdownMultiplier=2",
+            "--throttling.throughputKbps=6000",
+            "--throttling.uploadThroughputKbps=750",
+            "--throttling.latency=100"
+        ]
+        with open(log_path, "w") as log_file:
+            result_json = subprocess.run(command_json, stdout=log_file, stderr=subprocess.STDOUT)
 
-    if result_json.returncode == 0:
-        print(f"Lighthouse JSON run {i} completed successfully.")
-    else:
-        print(f"Error in Lighthouse JSON run {i}. Check {log_path} for details.")
-        break
+        if result_json.returncode == 0:
+            print(f"Lighthouse JSON run {i} completed successfully.")
+        else:
+            print(f"Error in Lighthouse JSON run {i}. Check {log_path} for details.")
+            break
 
     # 指標の抽出とExcel保存
     save_metrics_to_excel(output_dir, url)
