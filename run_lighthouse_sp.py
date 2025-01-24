@@ -19,7 +19,7 @@ def run_lighthouse_for_url(url, output_dir):
 
     # Lighthouseのプリセット設定
     for i in range(1, 6):  # 5回計測
-        output_path_json = os.path.join(output_dir, f"report_{i}.json")
+        output_path_json = os.path.abspath(os.path.join(output_dir, f"report_{i}.json"))
         log_path = os.path.join(output_dir, f"lighthouse_verbose_run_{i}.log")
 
         command_json = [
