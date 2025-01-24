@@ -1,0 +1,30 @@
+name: Run Lighthouse
+
+on:
+  schedule:
+    - cron: '1 6 * * *' # 定時スケジュール（例: 毎日午前0時）
+
+jobs:
+  lighthouse:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+
+      - name: Install Lighthouse
+        run: npm install -g lighthouse
+
+      - name: Run Lighthouse
+        run: lighthouse https://www.yahoo.co.jp/ --output=json --output-path=./lighthouse-report.json --quiet
+
+      - name: Upload Lighthouse Report
+        uses: actions/upload-artifact@v3
+        with:
+          name: lighthouse-report
+          path: ./lighthouse-report.json
